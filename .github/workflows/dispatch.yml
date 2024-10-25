@@ -1,0 +1,94 @@
+name: dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      build-plugin:
+        description: 'Build plugin'
+        required: false
+        type: boolean
+      build-Docusaurus:
+        description: 'Build docusaurus'
+        required: false
+        type: boolean
+      deploy-gitHub-pages:
+        description: 'deploy gitHub pages'
+        required: false
+        type: boolean
+jobs:
+  initialize:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_name: ${{ steps.get_info.outputs.repo_name }}
+      artifact_name: ${{ steps.get_info.outputs.repository_name }}-Dispatch-Build_${{ github.run_number}}
+    steps:
+    - name: 获取信息
+      id: get_info
+      run: |
+        echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+
+  build-plugin:
+    if: ${{ inputs.build-plugin }}
+    name: Build plugin
+    needs: initialize
+    runs-on: ubuntu-latest
+    steps:
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6
+      with:
+        submodules: true
+    - name: 安装java8
+      uses: actions/setup-java@v4.2.1
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+        cache: maven
+    # - name: 构建
+    #   run: |
+    #     mvn -B package --file pom.xml
+    #     mkdir staging
+    #     cp target/*.jar staging
+    # - name: 上传构建
+    #   uses: actions/upload-artifact@v4.3.3
+    #   with:
+    #     name: ${{ needs.initialize.outputs.artifact_name }}
+    #     path: staging
+
+  build-Docusaurus:
+    if: ${{ inputs.build-Docusaurus }}
+    name: Build docusaurus
+    needs: initialize
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+      # - name: 安装依赖
+      #   run: yarn install --frozen-lockfile
+      # - name: 构建网站
+      #   run: yarn build
+      # - name: 上传构建
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: build
+
+  deploy-gitHub-pages:
+    if: ${{ deploy-gitHub-pages }}
+    name: Deploy gitHub pages
+    needs: build-Docusaurus
+    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
+    permissions:
+      pages: write # 以部署到 Pages
+      id-token: write # 以验证部署来自恰当的源
+    # 部署到 Github Pages 环境
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # - name: 部署到 GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4
