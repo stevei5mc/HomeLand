@@ -65,11 +65,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
+          cache: npm
       # - name: 安装依赖
-      #   run: yarn install --frozen-lockfile
+      #   run: npm ci
       # - name: 构建网站
-      #   run: yarn build
+      #   run: npm run build
       # - name: 上传构建
       #   uses: actions/upload-pages-artifact@v3
       #   with:
@@ -92,3 +92,7 @@ jobs:
       # - name: 部署到 GitHub Pages
       #   id: deployment
       #   uses: actions/deploy-pages@v4
+      - name: List dir info
+        run: |
+          pwd
+          ls -la

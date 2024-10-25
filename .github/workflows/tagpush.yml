@@ -54,15 +54,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
-      - name: 安装依赖
-        run: yarn install --frozen-lockfile
-      - name: 构建网站
-        run: yarn build
-      - name: 上传构建
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build
+          cache: npm
+      # - name: 安装依赖
+      #   run: npm ci
+      # - name: 构建网站
+      #   run: npm run build
+      # - name: 上传构建
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: build
 
   release:
     name: Release
@@ -97,7 +97,7 @@ jobs:
     #     update_title: ${{ needs.initialize.outputs.version }}
     #     update_version: ${{ needs.initialize.outputs.version }}
 
-  deploy-Docusaurus:
+  deploy-gitHub-pages:
     name: Deploy gitHub pages
     needs: release
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
