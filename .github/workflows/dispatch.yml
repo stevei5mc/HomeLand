@@ -76,7 +76,7 @@ jobs:
       #     path: build
 
   deploy-gitHub-pages:
-    if: ${{ deploy-gitHub-pages }}
+    if: ${{ inputs.deploy-gitHub-pages }}
     name: Deploy gitHub pages
     needs: build-Docusaurus
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
