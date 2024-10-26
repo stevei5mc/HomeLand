@@ -55,10 +55,13 @@ jobs:
         with:
           node-version: 18
           cache: npm
-      # - name: 安装依赖
-      #   run: npm ci
-      # - name: 构建网站
-      #   run: npm run build
+      # - name: 构建
+      #     cd Docusaurus
+      #     npm ci
+      #     npm run build
+      #     cd ../
+      #     mkdir build
+      #     cp -r ./Docusaurus/build/* build
       # - name: 上传构建
       #   uses: actions/upload-pages-artifact@v3
       #   with:

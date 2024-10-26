@@ -23,7 +23,7 @@ jobs:
   build-plugin-body:
     name: Build plugin body
     needs: initialize
-    if: contains(needs.initialize.outputs.changed_fies, 'src/') 
+    if: contains(needs.initialize.outputs.changed_fies, 'plugin-body/') 
     runs-on: ubuntu-latest
     steps:
     - name: 拉取代码
@@ -35,7 +35,7 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
-        cache: maven
+        # cache: maven
     # - name: 构建
     #   run: |
     #     mvn -B package --file pom.xml
@@ -48,6 +48,7 @@ jobs:
     #     path: staging
 
   build-Docusaurus:
+    if: contains(needs.initialize.outputs.changed_fies, 'Docusaurus/') 
     name: Build docusaurus
     needs: initialize
     runs-on: ubuntu-latest
@@ -58,7 +59,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
+          # cache: npm
       # - name: 安装依赖
       #   run: npm ci
       # - name: 构建网站
