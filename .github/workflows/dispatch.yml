@@ -21,6 +21,7 @@ on:
       PR_ID:
         description: 需要批准的PR ID
         required: true
+
 jobs:
   initialize:
     runs-on: ubuntu-latest
@@ -86,8 +87,9 @@ jobs:
       #   with:
       #     path: build
 
+  # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
   deploy-gitHub-pages:
-    if: ${{ inputs.deploy-gitHub-pages }} && ${{ !inputs.PR_Approve }}
+    if: ${{ inputs.deploy-gitHub-pages }} && ${{ inputs.PR_Approve  == 'false' }}
     name: Deploy gitHub pages
     needs: build-Docusaurus
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
@@ -105,8 +107,9 @@ jobs:
       #   uses: actions/deploy-pages@v4
       run: pwd
 
+  # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
   PR_Approve:
-    if: ${{ !inputs.deploy-gitHub-pages }} && ${{ inputs.PR_Approve }}
+    if: ${{ inputs.deploy-gitHub-pages == 'false' }} && ${{ inputs.PR_Approve }}
     name: PR Approve
     needs: 
     - build-Docusaurus
