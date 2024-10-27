@@ -20,7 +20,7 @@ on:
         type: boolean
       PR_ID:
         description: 需要批准的PR ID
-        required: true
+        required: false
 
 jobs:
   initialize:
@@ -31,8 +31,7 @@ jobs:
     steps:
     - name: 获取信息
       id: get_info
-      run: |
-        echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+      run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
 
   build-plugin:
     if: ${{ inputs.build-plugin }}
@@ -105,7 +104,7 @@ jobs:
       # - name: 部署到 GitHub Pages
       #   id: deployment
       #   uses: actions/deploy-pages@v4
-      run: pwd
+      - run: pwd
 
   # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
   PR_Approve:
