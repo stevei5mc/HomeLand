@@ -11,9 +11,16 @@ on:
         required: false
         type: boolean
       deploy-gitHub-pages:
-        description: 'deploy gitHub pages'
+        description: 'Deploy gitHub pages'
         required: false
         type: boolean
+      PR_Approve:
+        description: 'PR Approve'
+        required: false
+        type: boolean
+      PR_ID:
+        description: 需要批准的PR ID
+        required: true
 jobs:
   initialize:
     runs-on: ubuntu-latest
@@ -33,11 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 拉取代码
-      uses: actions/checkout@v4.1.6
+      uses: actions/checkout@v4
       with:
         submodules: true
     - name: 安装java8
-      uses: actions/setup-java@v4.2.1
+      uses: actions/setup-java@v4
       with:
         java-version: '8'
         distribution: 'temurin'
@@ -48,7 +55,7 @@ jobs:
     #     mkdir staging
     #     cp target/*.jar staging
     # - name: 上传构建
-    #   uses: actions/upload-artifact@v4.3.3
+    #   uses: actions/upload-artifact@v4
     #   with:
     #     name: ${{ needs.initialize.outputs.artifact_name }}
     #     path: staging
@@ -59,9 +66,10 @@ jobs:
     needs: initialize
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 拉取代码
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          submodules: true
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -79,7 +87,7 @@ jobs:
       #     path: build
 
   deploy-gitHub-pages:
-    if: ${{ inputs.deploy-gitHub-pages }}
+    if: ${{ inputs.deploy-gitHub-pages }} && ${{ !inputs.PR_Approve }}
     name: Deploy gitHub pages
     needs: build-Docusaurus
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
@@ -95,7 +103,25 @@ jobs:
       # - name: 部署到 GitHub Pages
       #   id: deployment
       #   uses: actions/deploy-pages@v4
-      - name: List dir info
-        run: |
-          pwd
-          ls -la
+      run: pwd
+
+  PR_Approve:
+    if: ${{ !inputs.deploy-gitHub-pages }} && ${{ inputs.PR_Approve }}
+    name: PR Approve
+    needs: 
+    - build-Docusaurus
+    - build-plugin
+    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
+    permissions:
+      pages: write # 以部署到 Pages
+      id-token: write # 以验证部署来自恰当的源
+    # 部署到 Github Pages 环境
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+        with:
+          submodules: true
