@@ -32,6 +32,13 @@ jobs:
     - name: 获取信息
       id: get_info
       run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+    - name: 获取输入参数
+      run: |
+        echo Build plugin ${{ inputs.build-plugin }}
+        echo Build docusaurus ${{ inputs.build-Docusaurus }}
+        echo Deploy gitHub pages ${{ inputs.deploy-gitHub-pages }}
+        echo PR Approve ${{ inputs.PR_Approve }}
+        echo PR Approve ID${{ inputs.PR_ID }}
 
   build-plugin:
     if: ${{ inputs.build-plugin }}
@@ -127,3 +134,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      # - name: 批准PR
+      #   uses: hmarr/auto-approve-action@v4.0.0
+      #   with:
+      #     pull-request-number: ${{ inputs.PR_ID }}
+      #     review-message: |
+      #       编译已通过，批准通过
+      #       如果有新的提交则取消本次批准
