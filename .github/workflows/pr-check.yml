@@ -42,14 +42,16 @@ jobs:
         # cache: maven
     # - name: 构建
     #   run: |
+    #     cd plugin-body
     #     mvn -B package --file pom.xml
     #     mkdir staging
     #     cp target/*.jar staging
+    #     cd ../
     # - name: 上传构建
     #   uses: actions/upload-artifact@v4
     #   with:
     #     name: ${{ needs.initialize.outputs.artifact_name }}
-    #     path: staging
+    #     path: plugin-body/staging
 
   build-Docusaurus:
     if: contains(needs.initialize.outputs.changed_fies, 'Docusaurus/') 

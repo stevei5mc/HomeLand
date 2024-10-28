@@ -50,6 +50,12 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: true
+    - name: 拉取代码(批准PR专用)
+      if: ${{ inputs.deploy-gitHub-pages == 'false' && inputs.PR_Approve == 'true'}}
+      run: |
+        ls -la
+        gh pr checkout ${{ inputs.PR_ID }}
+        ls -la
     - name: 安装java8
       uses: actions/setup-java@v4
       with:
@@ -58,14 +64,16 @@ jobs:
         # cache: maven
     # - name: 构建
     #   run: |
+    #     cd plugin-body
     #     mvn -B package --file pom.xml
     #     mkdir staging
     #     cp target/*.jar staging
+    #     cd ../
     # - name: 上传构建
     #   uses: actions/upload-artifact@v4
     #   with:
     #     name: ${{ needs.initialize.outputs.artifact_name }}
-    #     path: staging
+    #     path: plugin-body/staging
 
   build-Docusaurus:
     if: ${{ inputs.build-Docusaurus }}
@@ -77,6 +85,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      - name: 拉取代码(批准PR专用)
+        if: ${{ inputs.deploy-gitHub-pages == 'false' && inputs.PR_Approve == 'true'}}
+        run: |
+          ls -la
+          gh pr checkout ${{ inputs.PR_ID }}
+          ls -la
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -95,7 +109,7 @@ jobs:
 
   # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
   deploy-gitHub-pages:
-    if: ${{ inputs.deploy-gitHub-pages  == 'true' && inputs.PR_Approve  == 'false' }}
+    if: ${{ inputs.deploy-gitHub-pages == 'true' && inputs.PR_Approve == 'false' }}
     name: Deploy gitHub pages
     needs: build-Docusaurus
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
@@ -114,8 +128,8 @@ jobs:
       - run: pwd
 
   # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
-  PR_Approve:
-    if: ${{ inputs.deploy-gitHub-pages == 'false' && inputs.PR_Approve  == 'true'}}
+  PR-Approve:
+    if: ${{ inputs.deploy-gitHub-pages == 'false' && inputs.PR_Approve == 'true'}}
     name: PR Approve
     needs: 
     - build-Docusaurus
@@ -141,3 +155,24 @@ jobs:
       #     review-message: |
       #       编译已通过，批准通过
       #       如果有新的提交则取消本次批准
+
+  aftermath-of-failure:
+    if: ${{ failure() }}
+    name: Aftermath of failure
+    needs: 
+    - deploy-gitHub-pages
+    - PR-Approve
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取信息
+        id: get_info
+        run: echo "url=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+      - name: PRComment
+        uses: miry/prcomment@v0.1.3
+        with:
+          msg: |
+            构建失败，请查看构建获取失败原因：
+            Build failed, please check the build to obtain the reason for the failure:
+            ${{ steps.get_info.outputs.url }}
+          pr: ${{ inputs.PR_ID }}
+          token: ${{ secrets.GITHUB_TOKEN }}

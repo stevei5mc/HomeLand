@@ -34,14 +34,16 @@ jobs:
         cache: maven
     - name: 构建
       run: |
+        cd plugin-body
         mvn -B package --file pom.xml
         mkdir staging
         cp target/*.jar staging
+        cd ../
     - name: 上传构建
       uses: actions/upload-artifact@v4
       with:
         name: ${{ needs.initialize.outputs.artifact_name }}
-        path: staging
+        path: plugin-body/staging
 
   build-Docusaurus:
     name: Build docusaurus
@@ -60,12 +62,10 @@ jobs:
       #     npm ci
       #     npm run build
       #     cd ../
-      #     mkdir build
-      #     cp -r ./Docusaurus/build/* build
       # - name: 上传构建
       #   uses: actions/upload-pages-artifact@v3
       #   with:
-      #     path: build
+      #     path: Docusaurus/build
 
   release:
     name: Release
