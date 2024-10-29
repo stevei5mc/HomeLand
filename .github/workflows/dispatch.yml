@@ -5,21 +5,25 @@ on:
       build-plugin:
         description: 'Build plugin'
         required: false
+        default: false
         type: boolean
       build-Docusaurus:
         description: 'Build docusaurus'
         required: false
+        default: false
         type: boolean
       deploy-gitHub-pages:
         description: 'Deploy gitHub pages'
         required: false
+        default: false
         type: boolean
       PR_Approve:
         description: 'PR Approve'
         required: false
+        default: false
         type: boolean
       PR_ID:
-        description: 需要批准的PR ID
+        description: 'PR Approve ID'
         required: false
 
 jobs:
@@ -134,14 +138,6 @@ jobs:
     needs: 
     - build-Docusaurus
     - build-plugin
-    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
-    permissions:
-      pages: write # 以部署到 Pages
-      id-token: write # 以验证部署来自恰当的源
-    # 部署到 Github Pages 环境
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
