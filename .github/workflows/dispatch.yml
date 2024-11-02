@@ -107,11 +107,13 @@ jobs:
           ls -la
           gh pr checkout ${{ inputs.PR_ID }}
           ls -la
-      - uses: actions/setup-node@v4
+      - name: Setup nodejs 18
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
       - name: 构建
+        run: |
           cd Docusaurus
           npm ci
           npm run build
