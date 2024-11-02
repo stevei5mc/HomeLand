@@ -57,15 +57,15 @@ jobs:
         with:
           node-version: 18
           cache: npm
-      # - name: 构建
-      #     cd Docusaurus
-      #     npm ci
-      #     npm run build
-      #     cd ../
-      # - name: 上传构建
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: Docusaurus/build
+      - name: 构建
+          cd Docusaurus
+          npm ci
+          npm run build
+          cd ../
+      - name: 上传构建
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Docusaurus/build
 
   release:
     name: Release

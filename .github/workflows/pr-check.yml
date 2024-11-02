@@ -27,7 +27,6 @@ jobs:
   build-plugin-body:
     name: Build plugin body
     needs: initialize
-    if: contains(needs.initialize.outputs.changed_fies, 'plugin-body/') 
     runs-on: ubuntu-latest
     steps:
     - name: 拉取代码
@@ -39,22 +38,21 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
-        # cache: maven
-    # - name: 构建
-    #   run: |
-    #     cd plugin-body
-    #     mvn -B package --file pom.xml
-    #     mkdir staging
-    #     cp target/*.jar staging
-    #     cd ../
-    # - name: 上传构建
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: ${{ needs.initialize.outputs.artifact_name }}
-    #     path: plugin-body/staging
+        cache: maven
+    - name: 构建
+      run: |
+        cd plugin-body
+        mvn -B package --file pom.xml
+        mkdir staging
+        cp target/*.jar staging
+        cd ../
+    - name: 上传构建
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ needs.initialize.outputs.artifact_name }}
+        path: plugin-body/staging
 
   build-Docusaurus:
-    if: contains(needs.initialize.outputs.changed_fies, 'Docusaurus/') 
     name: Build docusaurus
     needs: initialize
     runs-on: ubuntu-latest
@@ -65,12 +63,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          # cache: npm
-      # - name: 安装依赖
-      #   run: npm ci
-      # - name: 构建网站
-      #   run: npm run build
-      # - name: 上传构建
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: build
+          cache: npm
+      - name: 构建
+          cd Docusaurus
+          npm ci
+          npm run build
+          cd ../
