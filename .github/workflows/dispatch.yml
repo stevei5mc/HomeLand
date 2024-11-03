@@ -10,7 +10,7 @@ on:
       build-Docusaurus:
         description: 'Build docusaurus'
         required: false
-        default: true
+        default: false
         type: boolean
       deploy-gitHub-pages:
         description: 'Deploy gitHub pages'
