@@ -111,12 +111,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
       - name: 构建
         run: |
           cd Docusaurus
-          npm ci
-          npm run build
+          yarn install --frozen-lockfile
+          yarn build
           cd ../
       - name: 上传构建
         uses: actions/upload-pages-artifact@v3
