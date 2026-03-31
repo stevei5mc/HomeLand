@@ -1,0 +1,5 @@
+name: "HomeLand"
+main: "cn.stevei5mc.homland.HomeLandMain"
+version: "${version}"
+author: "stevei5mc"
+api: ["1.0.14"]
