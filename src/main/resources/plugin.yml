@@ -6,5 +6,11 @@ api: ["1.0.14"]
 
 permissions:
   homeland.land:
-    description: "插件主权限"
+    description: "插件用户主权限"
     default: true
+  homeland.admin:
+    description: "插件管理员主权限"
+    default: op
+  homeland.admin.reload:
+    description: "插件管理员重载限"
+    default: op
