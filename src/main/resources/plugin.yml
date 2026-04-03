@@ -3,3 +3,8 @@ main: "cn.stevei5mc.homland.HomeLandMain"
 version: "${version}"
 author: "stevei5mc"
 api: ["1.0.14"]
+
+permissions:
+  homeland.land:
+    description: "插件主权限"
+    default: true

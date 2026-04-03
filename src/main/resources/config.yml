@@ -1,0 +1,19 @@
+version: 1
+
+# 玩家在默认情况下可以创建的领地数量
+defaultLandSlot: 3
+
+# 保存数据的方式
+# auto = 自动选择以 xuid 或玩家名来保存
+# xuid = 以玩家的xuid来进行保存
+# name = 以玩家名来保存
+saveType: auto
+
+hub:
+  enable: true
+  world: world
+  x: 0.5
+  y: 10
+  z: 0.5
+  yaw: 90
+  pitch: 0
