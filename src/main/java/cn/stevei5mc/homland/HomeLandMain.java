@@ -6,6 +6,7 @@ import cn.nukkit.utils.Config;
 import cn.stevei5mc.homland.commands.admin.AdminMainCmd;
 import cn.stevei5mc.homland.commands.land.LandMainCmd;
 import cn.stevei5mc.homland.listener.PlayerListener;
+import cn.stevei5mc.homland.utils.FilesUtils;
 import lombok.Getter;
 
 public class HomeLandMain extends PluginBase {
@@ -20,8 +21,7 @@ public class HomeLandMain extends PluginBase {
     @Override
     public void onLoad() {
         instance = this;
-        this.saveResource("config.yml");
-        this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+        loadResource();
     }
 
     @Override
@@ -45,7 +45,25 @@ public class HomeLandMain extends PluginBase {
         this.getLogger().info("已停止运行，感谢你的使用");
     }
 
+    private void loadResource() {
+        this.saveResource("config.yml");
+        this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+        String directoryPath = getLandDataPath();
+        if (this.config.getString("saveDataPath", "{server}").toLowerCase().trim().equals("{server}")) {
+            directoryPath = this.getDataFolder() + "/data";
+        }
+        FilesUtils.createDirectory(directoryPath + "/player_land");
+    }
+
     public void reloadConfig() {
         this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+    }
+
+    public String getLandDataPath() {
+        String directoryPath = this.config.getString("saveDataPath").trim();
+        if (this.config.getString("saveDataPath", "{server}").toLowerCase().trim().equals("{server}")) {
+            directoryPath = this.getDataFolder() + "/data";
+        }
+        return directoryPath;
     }
 }

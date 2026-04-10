@@ -9,6 +9,10 @@ defaultLandSlot: 3
 # name = 以玩家名来保存
 saveType: auto
 
+# 领地数据保存路径
+# 使用 {server} 表示保存在插件的配置文件目录中的data目录
+saveDataPath: "{server}"
+
 hub:
   enable: true
   world: world
