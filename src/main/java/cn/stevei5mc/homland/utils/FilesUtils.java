@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class FilesUtils {
 
-    private static HomeLandMain main = HomeLandMain.getInstance();
+    private static final HomeLandMain main = HomeLandMain.getInstance();
 
     public static void createDirectory(String directoryPath) {
         Path path = Paths.get(directoryPath);
@@ -23,6 +25,22 @@ public class FilesUtils {
         } catch (IOException e) {
             main.getLogger().error("创建目录时发生错误: " + e.getMessage(), e);
             e.printStackTrace();
+        }
+    }
+
+    public static void deleteDirectory(Path directory) throws IOException {
+        if (!Files.exists(directory)) {
+            return;
+        }
+
+        try (Stream<Path> walk = Files.walk(directory)) {
+            walk.sorted(Comparator.reverseOrder()).forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    main.getLogger().error("无法删除目录: " + path + ", 原因: " + e.getMessage(), e);
+                }
+            });
         }
     }
 }

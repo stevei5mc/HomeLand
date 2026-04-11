@@ -7,6 +7,11 @@ import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.level.Level;
 import cn.stevei5mc.homland.commands.base.BaseSubCommand;
 import cn.stevei5mc.homland.utils.LandUtils;
+import cn.stevei5mc.homland.utils.ZipUtils;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ToHomeCmd extends BaseSubCommand {
     public ToHomeCmd(String name) {
@@ -27,6 +32,13 @@ public class ToHomeCmd extends BaseSubCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
         String landName = "land-" + LandUtils.getSaveDate(player);
+        if (!Files.exists(Paths.get(main.getServer().getDataPath() + "/worlds/" + landName))) {
+            try {
+                ZipUtils.decompress(main.getLandDataPath() + "/player_land/" + landName + ".zip", main.getServer().getDataPath() + "/worlds/" + landName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         main.getServer().loadLevel(landName);
         Level level = main.getServer().getLevelByName(landName);
         player.sendMessage("§a领地加载中，请耐心等候。");
