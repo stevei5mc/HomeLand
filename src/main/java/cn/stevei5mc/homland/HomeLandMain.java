@@ -4,7 +4,7 @@ import cn.nukkit.level.Location;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.stevei5mc.homland.commands.admin.AdminMainCmd;
-import cn.stevei5mc.homland.commands.land.LandMainCmd;
+import cn.stevei5mc.homland.commands.user.LandMainCmd;
 import cn.stevei5mc.homland.listener.PlayerListener;
 import cn.stevei5mc.homland.utils.FilesUtils;
 import lombok.Getter;

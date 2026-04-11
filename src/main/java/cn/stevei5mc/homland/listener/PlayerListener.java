@@ -31,11 +31,11 @@ public class PlayerListener implements Listener {
                 level.save();
                 level.unload();
                 try {
-                    ZipUtils.compress(main.getServer().getDataPath() + "/worlds/" + landName + "/", main.getLandDataPath() + "/player_land/" + landName + ".zip");
+                    ZipUtils.compress(main.getServer().getDataPath() + "/worlds/" + landName + "/", main.getLandDataPath() + "/player_land/" + landName);
                 } catch (IOException e) {
                     main.getLogger().error("§c在尝试压缩领地世界文件时发生一个错误！", e);
                 }
-            }, 200, true);
+            }, 100, true);
         }
     }
 }

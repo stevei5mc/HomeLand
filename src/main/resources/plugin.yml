@@ -5,7 +5,7 @@ author: "stevei5mc"
 api: ["1.0.14"]
 
 permissions:
-  homeland.land:
+  homeland.user:
     description: "插件用户主权限"
     default: true
   homeland.admin:

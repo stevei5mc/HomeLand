@@ -1,4 +1,4 @@
-package cn.stevei5mc.homland.commands.land.sub;
+package cn.stevei5mc.homland.commands.user.sub;
 
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;

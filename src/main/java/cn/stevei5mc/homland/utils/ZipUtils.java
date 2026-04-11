@@ -53,19 +53,27 @@ public class ZipUtils {
     }
 
     /**
-     * 将源文件或目录压缩到目标 ZIP 文件
+     * 将源文件或目录压缩到目标 ZIP 文件（不包含根文件夹本身）
      *
      * @param sourceFilePath 要压缩的源文件或目录的路径
-     * @param zipFilePath    目标 ZIP 文件的路径
+     * @param zipFilePath    目标 ZIP 文件的路径（不需要加 .zip 后缀）
      * @throws IOException 如果发生 I/O 错误
      */
     public static void compress(String sourceFilePath, String zipFilePath) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(zipFilePath);
+        try (FileOutputStream fos = new FileOutputStream(zipFilePath + ".zip");
              ZipOutputStream zos = new ZipOutputStream(fos)) {
 
             File sourceFile = new File(sourceFilePath);
-            String entryName = sourceFile.getName();
-            addFileToZip(zos, sourceFile, entryName);
+
+            if (sourceFile.isDirectory()) {
+                // 如果是目录，遍历其子文件/子目录，entryName 直接使用相对路径（不包含根目录名）
+                for (File child : sourceFile.listFiles()) {
+                    addFileToZip(zos, child, child.getName());
+                }
+            } else {
+                // 如果是单个文件，直接添加
+                addFileToZip(zos, sourceFile, sourceFile.getName());
+            }
         }
     }
 
@@ -79,19 +87,16 @@ public class ZipUtils {
      */
     private static void addFileToZip(ZipOutputStream zos, File file, String entryName) throws IOException {
         if (file.isDirectory()) {
-            // 如果是目录，则列出其内容并递归添加
             for (File childFile : file.listFiles()) {
-                // 构建子项的完整路径名
                 String childEntryName = entryName + "/" + childFile.getName();
                 addFileToZip(zos, childFile, childEntryName);
             }
         } else {
-            // 如果是普通文件，则直接添加到 ZIP
             try (FileInputStream fis = new FileInputStream(file)) {
                 ZipEntry zipEntry = new ZipEntry(entryName);
                 zos.putNextEntry(zipEntry);
 
-                byte[] buffer = new byte[8192]; // 使用缓冲区提高效率
+                byte[] buffer = new byte[8192];
                 int length;
                 while ((length = fis.read(buffer)) > 0) {
                     zos.write(buffer, 0, length);
