@@ -6,6 +6,7 @@ import cn.nukkit.utils.Config;
 import cn.stevei5mc.homland.commands.admin.AdminMainCmd;
 import cn.stevei5mc.homland.commands.user.LandMainCmd;
 import cn.stevei5mc.homland.listener.PlayerListener;
+import cn.stevei5mc.homland.tasks.SaveLandWorldTask;
 import cn.stevei5mc.homland.utils.FilesUtils;
 import lombok.Getter;
 
@@ -34,6 +35,7 @@ public class HomeLandMain extends PluginBase {
         this.getServer().getCommandMap().register("land", new LandMainCmd("land", "HomeLand 主命令"));
         this.getServer().getCommandMap().register("land-admin", new AdminMainCmd("land-admin", "HomeLand 管理员主命令"));
 
+        this.getServer().getScheduler().scheduleRepeatingTask(this, new SaveLandWorldTask(this), this.config.getInt("landSaveCycle", 10) * 60 * 20,true);
         this.getServer().getScheduler().scheduleDelayedTask(this, () -> {
             this.getLogger().warning("§c警告! §c本插件为免费且开源的，如果您付费获取获取的，则有可能被误导");
             this.getLogger().info("§a开源链接和使用方法: §bhttps://github.com/stevei5mc/HomeLand");

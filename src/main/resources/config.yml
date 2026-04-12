@@ -13,6 +13,9 @@ saveType: auto
 # 使用 {server} 表示保存在插件的配置文件目录中的data目录
 saveDataPath: "{server}"
 
+# 自动保存领地的周期 （单位：分钟）
+landSaveCycle: 10
+
 hub:
   enable: true
   world: world
