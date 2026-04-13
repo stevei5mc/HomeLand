@@ -8,6 +8,7 @@ import cn.stevei5mc.homland.commands.user.LandMainCmd;
 import cn.stevei5mc.homland.listener.PlayerListener;
 import cn.stevei5mc.homland.tasks.SaveLandWorldTask;
 import cn.stevei5mc.homland.utils.FilesUtils;
+import cn.stevei5mc.homland.utils.enums.LandDataDirectory;
 import lombok.Getter;
 
 public class HomeLandMain extends PluginBase {
@@ -54,7 +55,9 @@ public class HomeLandMain extends PluginBase {
         if (this.config.getString("saveDataPath", "{server}").toLowerCase().trim().equals("{server}")) {
             directoryPath = this.getDataFolder() + "/data";
         }
-        FilesUtils.createDirectory(directoryPath + "/player_land");
+        for (LandDataDirectory dir: LandDataDirectory.values()) {
+            FilesUtils.createDirectory(directoryPath + "/" + dir.getName());
+        }
     }
 
     public void reloadConfig() {

@@ -8,6 +8,7 @@ import cn.nukkit.level.Level;
 import cn.stevei5mc.homland.commands.base.BaseSubCommand;
 import cn.stevei5mc.homland.utils.LandUtils;
 import cn.stevei5mc.homland.utils.ZipUtils;
+import cn.stevei5mc.homland.utils.enums.LandDataDirectory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,7 +35,7 @@ public class ToHomeCmd extends BaseSubCommand {
         String landName = "land-" + LandUtils.getSaveDate(player);
         if (!Files.exists(Paths.get(main.getServer().getDataPath() + "/worlds/" + landName))) {
             try {
-                ZipUtils.decompress(main.getLandDataPath() + "/player_land/" + landName + ".zip", main.getServer().getDataPath() + "/worlds/" + landName);
+                ZipUtils.decompress(main.getLandDataPath()  + LandDataDirectory.PLAYER_LAND.getPath() + landName + ".zip", main.getServer().getDataPath() + "/worlds/" + landName);
             } catch (IOException e) {
                 e.printStackTrace();
             }

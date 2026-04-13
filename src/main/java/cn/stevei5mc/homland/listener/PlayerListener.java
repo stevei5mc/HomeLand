@@ -9,6 +9,7 @@ import cn.stevei5mc.homland.HomeLandMain;
 import cn.stevei5mc.homland.utils.FilesUtils;
 import cn.stevei5mc.homland.utils.LandUtils;
 import cn.stevei5mc.homland.utils.ZipUtils;
+import cn.stevei5mc.homland.utils.enums.LandDataDirectory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -33,7 +34,7 @@ public class PlayerListener implements Listener {
                 level.save();
                 level.unload();
                 try {
-                    ZipUtils.compress(main.getServer().getDataPath() + "/worlds/" + landName + "/", main.getLandDataPath() + "/player_land/" + landName);
+                    ZipUtils.compress(main.getServer().getDataPath() + "/worlds/" + landName + "/", main.getLandDataPath() + LandDataDirectory.PLAYER_LAND.getPath() + landName);
                 } catch (IOException e) {
                     main.getLogger().error("§c在尝试压缩领地世界文件时发生一个错误！", e);
                 }
