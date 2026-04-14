@@ -3,6 +3,7 @@ package cn.stevei5mc.homland.commands.user;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.stevei5mc.homland.commands.base.BaseCommand;
+import cn.stevei5mc.homland.commands.user.sub.BackupLandCmd;
 import cn.stevei5mc.homland.commands.user.sub.CreateLandCmd;
 import cn.stevei5mc.homland.commands.user.sub.ToHomeCmd;
 
@@ -12,6 +13,7 @@ public class LandMainCmd extends BaseCommand {
         this.setPermission("homeland.user");
         this.addSubCommand(new CreateLandCmd("create"));
         this.addSubCommand(new ToHomeCmd("home"));
+        this.addSubCommand(new BackupLandCmd("backup"));
     }
 
     @Override

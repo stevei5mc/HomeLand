@@ -33,7 +33,8 @@ public class SaveLandWorldTask extends PluginTask<HomeLandMain> {
                          player.sendMessage("§a正在为您保存所在的领地");
                      });
                      try {
-                         ZipUtils.compress(main.getServer().getDataPath() + "/worlds/" + level.getFolderName() + "/", main.getLandDataPath() + LandDataDirectory.PLAYER_LAND.getPath() + level.getFolderName());
+                         ZipUtils.compress(main.getServer().getDataPath() + "/worlds/" + level.getFolderName() + "/",
+                                 main.getLandDataPath() + LandDataDirectory.PLAYER_LAND.getPath() + level.getFolderName());
                      } catch (IOException e) {
                          main.getLogger().error("§c在自动保存领地时发生错误", e);
                      }

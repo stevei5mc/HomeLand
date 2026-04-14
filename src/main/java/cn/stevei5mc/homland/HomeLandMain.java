@@ -3,6 +3,7 @@ package cn.stevei5mc.homland;
 import cn.nukkit.level.Location;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
+import cn.stevei5mc.homland.commands.HomeCmd;
 import cn.stevei5mc.homland.commands.admin.AdminMainCmd;
 import cn.stevei5mc.homland.commands.user.LandMainCmd;
 import cn.stevei5mc.homland.listener.PlayerListener;
@@ -34,6 +35,7 @@ public class HomeLandMain extends PluginBase {
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         this.getServer().getCommandMap().register("land", new LandMainCmd("land", "HomeLand 主命令"));
+        this.getServer().getCommandMap().register("home", new HomeCmd("home", "HomeLand 返回领地命令"));
         this.getServer().getCommandMap().register("land-admin", new AdminMainCmd("land-admin", "HomeLand 管理员主命令"));
 
         this.getServer().getScheduler().scheduleRepeatingTask(this, new SaveLandWorldTask(this), this.config.getInt("landSaveCycle", 10) * 60 * 20,true);
