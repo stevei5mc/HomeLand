@@ -43,4 +43,14 @@ public class FilesUtils {
             });
         }
     }
+
+    public static boolean deleteFile(String filePath) {
+        Path pathToFile = Paths.get(filePath);
+        try {
+            return Files.deleteIfExists(pathToFile);
+        } catch (IOException e) {
+            main.getLogger().error("删除文件时发生错误: " + e.getMessage());
+            return false;
+        }
+    }
 }
