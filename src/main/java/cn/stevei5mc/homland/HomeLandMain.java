@@ -23,6 +23,7 @@ public class HomeLandMain extends PluginBase {
 
     @Override
     public void onLoad() {
+        saveResources();
         instance = this;
         loadResource();
     }
@@ -50,8 +51,11 @@ public class HomeLandMain extends PluginBase {
         this.getLogger().info("已停止运行，感谢你的使用");
     }
 
-    private void loadResource() {
+    private void saveResources() {
         this.saveResource("config.yml");
+    }
+
+    public void loadResource() {
         this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
         String directoryPath = getLandDataPath();
         if (this.config.getString("saveDataPath", "{server}").toLowerCase().trim().equals("{server}")) {
@@ -60,10 +64,6 @@ public class HomeLandMain extends PluginBase {
         for (LandDataDirectory dir: LandDataDirectory.values()) {
             FilesUtils.createDirectory(directoryPath + "/" + dir.getName());
         }
-    }
-
-    public void reloadConfig() {
-        this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
     }
 
     public String getLandDataPath() {

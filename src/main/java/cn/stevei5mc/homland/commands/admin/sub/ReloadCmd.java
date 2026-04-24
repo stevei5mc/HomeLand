@@ -21,7 +21,7 @@ public class ReloadCmd extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        main.reloadConfig();
+        main.loadResource();
         sender.sendMessage("§a配置文件重载成功");
         return true;
     }

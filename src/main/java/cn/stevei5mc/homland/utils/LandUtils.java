@@ -1,6 +1,7 @@
 package cn.stevei5mc.homland.utils;
 
 import cn.nukkit.Player;
+import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.level.Level;
 import cn.stevei5mc.homland.HomeLandMain;
 import cn.stevei5mc.homland.utils.enums.LandDataDirectory;
@@ -25,6 +26,26 @@ public class LandUtils {
         boolean rule = (getSaveType().equals(SaveDateType.AUTO) && main.getServer().xboxAuth) || getSaveType().equals(SaveDateType.XUID);
         return rule ? player.getLoginChainData().getXUID() : player.getName();
     }
+
+    public static void createLand(Player targetPlayer) {
+        try {
+            String landName = "land-" + LandUtils.getSaveDate(targetPlayer);
+            targetPlayer.sendMessage("§a领地正在生成中，请耐心等候。");
+            ZipUtils.decompress(main.getDataFolder() + "/test.zip", main.getServer().getDataPath() + "/worlds/" + landName);
+            main.getServer().loadLevel(landName);
+            Level level = main.getServer().getLevelByName(landName);
+            targetPlayer.sendMessage("§a领地生成成功，正在尝试将您传送至领地。");
+            if (level != null) {
+                targetPlayer.teleport(level.getSafeSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }else {
+                targetPlayer.sendMessage("§c传送至目标领地失败，请自行传送至领地");
+            }
+        } catch (IOException e) {
+            targetPlayer.sendMessage("§c创建领地时发生了一个错误，请尝试重新创建，如果还是失败请及时联系管理员！");
+            main.getLogger().error("§c在创建领地时发生一个错误！", e);
+        }
+    }
+
 
     public static void deleteLand(Player targetPlayer) {
         String landName = "land-" + LandUtils.getSaveDate(targetPlayer);
