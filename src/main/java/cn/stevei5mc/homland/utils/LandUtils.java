@@ -3,16 +3,25 @@ package cn.stevei5mc.homland.utils;
 import cn.nukkit.Player;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Location;
+import cn.nukkit.utils.ConfigSection;
 import cn.stevei5mc.homland.HomeLandMain;
+import cn.stevei5mc.homland.land.LandTemplate;
 import cn.stevei5mc.homland.utils.enums.LandDataDirectory;
 import cn.stevei5mc.homland.utils.enums.SaveDateType;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LandUtils {
 
     private static final HomeLandMain main = HomeLandMain.getInstance();
+
+    @Getter
+    private static final Map<String, LandTemplate> landTemplates = new HashMap<>();
 
     public static SaveDateType getSaveType() {
         switch (main.getConfig().getString("saveType", "auto").toLowerCase().trim()) {
@@ -27,7 +36,7 @@ public class LandUtils {
         return rule ? player.getLoginChainData().getXUID() : player.getName();
     }
 
-    public static void createLand(Player targetPlayer) {
+    public static void createLand(Player targetPlayer, LandTemplate template) {
         try {
             String landName = "land-" + LandUtils.getSaveDate(targetPlayer);
             targetPlayer.sendMessage("§a领地正在生成中，请耐心等候。");
@@ -36,7 +45,9 @@ public class LandUtils {
             Level level = main.getServer().getLevelByName(landName);
             targetPlayer.sendMessage("§a领地生成成功，正在尝试将您传送至领地。");
             if (level != null) {
-                targetPlayer.teleport(level.getSafeSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                level.setSpawnLocation(template.getSpawnPosition());
+                Location location = template.getTpPosition().setLevel(level)
+                targetPlayer.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }else {
                 targetPlayer.sendMessage("§c传送至目标领地失败，请自行传送至领地");
             }
@@ -59,6 +70,14 @@ public class LandUtils {
             }
             FilesUtils.deleteFile(main.getLandDataPath() + LandDataDirectory.PLAYER_LAND.getPath() + landName + ".zip");
             FilesUtils.deleteFile(main.getLandDataPath() + LandDataDirectory.PLAYER_LAND_BACKUP.getPath() + landName + "_backup.zip");
+        }
+    }
+
+    public static void loadLandTemplate() {
+        landTemplates.clear();
+        ConfigSection configSections = main.getTemplatesConfig().getSections("land-templates");
+        for (String template: configSections.getAllMap().keySet()) {
+            landTemplates.put(template, new LandTemplate(configSections.getSection(template)));
         }
     }
 }

@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import cn.stevei5mc.homland.commands.base.BaseSubCommand;
+import cn.stevei5mc.homland.form.CreateLandForm;
 import cn.stevei5mc.homland.utils.LandUtils;
 
 public class CreateLandCmd extends BaseSubCommand {
@@ -19,7 +20,7 @@ public class CreateLandCmd extends BaseSubCommand {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        LandUtils.createLand(player);
+        CreateLandForm.createLand(player);
         return true;
     }
 

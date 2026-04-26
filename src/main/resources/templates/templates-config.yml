@@ -1,0 +1,6 @@
+version: 1
+land-templates:
+  classic:
+    name: "经典空岛"
+    file: "classic"
+    spawnPosition: "4.5&89.0&4.5&0&0&0"

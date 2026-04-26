@@ -43,7 +43,6 @@ public abstract class BaseCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-//        Language lang = main.getBaseLang(sender);
         if(hasPermission(sender)) {
             if(args.length > 0) {
                 String subCommand = args[0].toLowerCase();
@@ -52,10 +51,8 @@ public abstract class BaseCommand extends Command {
                     if (command.canUser(sender)) {
                         return command.execute(sender, s, args);
                     }else if (sender.isPlayer()) {
-                        //sender.sendMessage(main.getMessagePrefix() +lang.translateString("command_not_permission"));
                         sender.sendMessage("§c你没有权限使用此命令！");
                     }else {
-                        //sender.sendMessage(main.getMessagePrefix() +lang.translateString("command_in_game_run"));
                         sender.sendMessage("§c请在游戏内使用此命令！");
                     }
                 }else {
@@ -70,7 +67,6 @@ public abstract class BaseCommand extends Command {
             }
             return true;
         }
-        //sender.sendMessage(main.getMessagePrefix() +lang.translateString("command_not_permission"));
         sender.sendMessage("§c你没有权限使用此命令！");
         return true;
     }

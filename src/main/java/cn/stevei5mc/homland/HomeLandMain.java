@@ -9,6 +9,7 @@ import cn.stevei5mc.homland.commands.user.LandMainCmd;
 import cn.stevei5mc.homland.listener.PlayerListener;
 import cn.stevei5mc.homland.tasks.SaveLandWorldTask;
 import cn.stevei5mc.homland.utils.FilesUtils;
+import cn.stevei5mc.homland.utils.LandUtils;
 import cn.stevei5mc.homland.utils.enums.LandDataDirectory;
 import lombok.Getter;
 
@@ -18,6 +19,8 @@ public class HomeLandMain extends PluginBase {
     private static HomeLandMain instance;
     @Getter
     private Config config;
+    @Getter
+    private Config templatesConfig;
     @Getter
     private Location hubLocation;
 
@@ -53,10 +56,13 @@ public class HomeLandMain extends PluginBase {
 
     private void saveResources() {
         this.saveResource("config.yml");
+        this.saveResource("templates/templates-config.yml");
     }
 
     public void loadResource() {
         this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+        this.templatesConfig = new Config(this.getDataFolder() + "/templates/templates-config.yml", Config.YAML);
+
         String directoryPath = getLandDataPath();
         if (this.config.getString("saveDataPath", "{server}").toLowerCase().trim().equals("{server}")) {
             directoryPath = this.getDataFolder() + "/data";
@@ -64,6 +70,8 @@ public class HomeLandMain extends PluginBase {
         for (LandDataDirectory dir: LandDataDirectory.values()) {
             FilesUtils.createDirectory(directoryPath + "/" + dir.getName());
         }
+
+        LandUtils.loadLandTemplate();
     }
 
     public String getLandDataPath() {
