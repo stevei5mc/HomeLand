@@ -40,14 +40,13 @@ public class LandUtils {
         try {
             String landName = "land-" + LandUtils.getSaveDate(targetPlayer);
             targetPlayer.sendMessage("§a领地正在生成中，请耐心等候。");
-            ZipUtils.decompress(main.getDataFolder() + "/test.zip", main.getServer().getDataPath() + "/worlds/" + landName);
+            ZipUtils.decompress(main.getDataFolder() + "/templates/" + template.getFile(), main.getServer().getDataPath() + "/worlds/" + landName);
             main.getServer().loadLevel(landName);
             Level level = main.getServer().getLevelByName(landName);
             targetPlayer.sendMessage("§a领地生成成功，正在尝试将您传送至领地。");
             if (level != null) {
                 level.setSpawnLocation(template.getSpawnPosition());
-                Location location = template.getTpPosition().setLevel(level)
-                targetPlayer.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                targetPlayer.teleport(template.getTpLocation(level), PlayerTeleportEvent.TeleportCause.PLUGIN);
             }else {
                 targetPlayer.sendMessage("§c传送至目标领地失败，请自行传送至领地");
             }
