@@ -15,22 +15,20 @@ public class LandTemplate {
         this.name = template.getString("name");
         this.file = template.getString("file") + ".zip";
         String[] pos = template.getString("spawnPosition").split("&");
+        this.position = new Double[]{Double.parseDouble(pos[0]), Double.parseDouble(pos[1]), Double.parseDouble(pos[2]), Double.parseDouble(pos[3]), Double.parseDouble(pos[4]), Double.parseDouble(pos[5])};
         if (pos.length == 6) {
-            this.spawnPosition = new Position(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]), Double.parseDouble(pos[2]));
-            this.tpLocation = new Location(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]), Double.parseDouble(pos[2]), Double.parseDouble(pos[3]), Double.parseDouble(pos[4]), Double.parseDouble(pos[5]));
+            this.spawnPosition = new Position(position[0], position[1], position[2]);
         }
     }
 
     private final ConfigSection templateConfig;
     private final String name;
     private final String file;
-    private Position spawnPosition;
     @Getter(AccessLevel.NONE)
-    private Location tpLocation;
+    private final Double[] position;
+    private Position spawnPosition;
 
     public Location getTpLocation(Level level) {
-        LandTemplate template = new LandTemplate(templateConfig);
-        template.tpLocation.setLevel(level);
-        return template.tpLocation;
+        return new Location(position[0], position[1], position[2], position[3], position[4], position[5], level);
     }
 }

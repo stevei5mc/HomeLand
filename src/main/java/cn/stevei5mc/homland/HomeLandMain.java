@@ -26,8 +26,8 @@ public class HomeLandMain extends PluginBase {
 
     @Override
     public void onLoad() {
-        saveResources();
         instance = this;
+        saveResources();
         loadResource();
     }
 
